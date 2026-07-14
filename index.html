@@ -1,0 +1,434 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>生與不生的大哉問</title>
+<style>
+  :root {
+    --bg: #0f1526;
+    --bg-card: #161f36;
+    --bg-elevated: #1e2843;
+    --gold: #e0c28f;
+    --gold-strong: #f0d7a8;
+    --gold-soft: rgba(224, 194, 143, .14);
+    --slate: #93a4c9;
+    --slate-soft: rgba(147, 164, 201, .14);
+    --text-hi: #f2ede0;
+    --text-body: #cdd1e0;
+    --text-muted: #7c869c;
+    --border: rgba(224, 194, 143, .2);
+    --border-soft: rgba(255, 255, 255, .07);
+    --danger: #d98a83;
+    --shadow: 0 12px 32px rgba(0, 0, 0, .35);
+  }
+  @media (prefers-color-scheme: light) {
+    :root {
+      --bg: #f6f1e4; --bg-card: #fffdf8; --bg-elevated: #f1e8d6;
+      --gold: #b8894f; --gold-strong: #96703d; --gold-soft: rgba(184, 137, 79, .1);
+      --slate: #5b6f97; --slate-soft: rgba(91, 111, 151, .09);
+      --text-hi: #26293a; --text-body: #3d4257; --text-muted: #767c94;
+      --border: rgba(184, 137, 79, .28); --border-soft: rgba(30, 30, 50, .09);
+      --danger: #b3564d; --shadow: 0 10px 28px rgba(90, 70, 40, .12);
+    }
+  }
+  :root[data-theme="dark"] {
+    --bg: #0f1526; --bg-card: #161f36; --bg-elevated: #1e2843;
+    --gold: #e0c28f; --gold-strong: #f0d7a8; --gold-soft: rgba(224, 194, 143, .14);
+    --slate: #93a4c9; --slate-soft: rgba(147, 164, 201, .14);
+    --text-hi: #f2ede0; --text-body: #cdd1e0; --text-muted: #7c869c;
+    --border: rgba(224, 194, 143, .2); --border-soft: rgba(255, 255, 255, .07);
+    --danger: #d98a83; --shadow: 0 12px 32px rgba(0, 0, 0, .35);
+  }
+  :root[data-theme="light"] {
+    --bg: #f6f1e4; --bg-card: #fffdf8; --bg-elevated: #f1e8d6;
+    --gold: #b8894f; --gold-strong: #96703d; --gold-soft: rgba(184, 137, 79, .1);
+    --slate: #5b6f97; --slate-soft: rgba(91, 111, 151, .09);
+    --text-hi: #26293a; --text-body: #3d4257; --text-muted: #767c94;
+    --border: rgba(184, 137, 79, .28); --border-soft: rgba(30, 30, 50, .09);
+    --danger: #b3564d; --shadow: 0 10px 28px rgba(90, 70, 40, .12);
+  }
+
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--text-body);
+    font-family: "PingFang TC", "Microsoft JhengHei", "Noto Sans TC", "Heiti TC", sans-serif;
+    line-height: 1.75;
+    -webkit-font-smoothing: antialiased;
+  }
+  h1, h2, h3, .serif { font-family: "Noto Serif TC", "Songti TC", "PMingLiU", "Microsoft JhengHei", serif; }
+  .wrap { max-width: 880px; margin: 0 auto; padding: 56px 20px 40px; }
+
+  .hero { text-align: center; margin-bottom: 44px; }
+  .eyebrow { font-size: .82rem; letter-spacing: .32em; color: var(--gold); margin-bottom: 14px; }
+  .hero h1 { font-size: clamp(1.8rem, 5vw, 2.6rem); color: var(--text-hi); margin: 0 0 18px; text-wrap: balance; font-weight: 700; }
+  .hero p { max-width: 46ch; margin: 0 auto 8px; color: var(--text-body); font-size: .98rem; }
+  .hero .lede { color: var(--text-muted); font-size: .92rem; }
+  .whisper-count {
+    display: inline-flex; align-items: center; gap: 8px; margin-top: 26px;
+    padding: 8px 18px; border: 1px solid var(--border); border-radius: 999px;
+    color: var(--gold); font-size: .85rem; background: var(--gold-soft);
+  }
+  .whisper-count b { font-variant-numeric: tabular-nums; color: var(--text-hi); font-weight: 700; }
+
+  .status-banner {
+    text-align: center; color: var(--text-muted); font-size: .88rem; margin-bottom: 20px;
+  }
+  .status-banner.error { color: var(--danger); }
+
+  .admin-bar {
+    display: flex; justify-content: center; align-items: center; gap: 10px;
+    margin: 8px 0 30px; font-size: .82rem; color: var(--text-muted);
+  }
+  .admin-bar .pill {
+    display: inline-flex; align-items: center; gap: 6px; padding: 5px 14px; border-radius: 999px;
+    border: 1px solid var(--border-soft); background: var(--bg-card);
+  }
+  .admin-bar.on .pill { border-color: var(--gold); color: var(--gold); }
+  .admin-bar button { background: none; border: none; color: inherit; cursor: pointer; font-family: inherit; font-size: inherit; text-decoration: underline; text-underline-offset: 3px; }
+
+  .columns { display: grid; grid-template-columns: 1fr; gap: 20px; }
+  @media (min-width: 720px) { .columns { grid-template-columns: 1fr 1fr; } }
+
+  .column {
+    background: var(--bg-card); border: 1px solid var(--border-soft); border-radius: 18px;
+    box-shadow: var(--shadow); padding: 26px 24px 22px; display: flex; flex-direction: column;
+  }
+  .column-head {
+    display: flex; align-items: center; gap: 10px; margin-bottom: 18px;
+    padding-bottom: 16px; border-bottom: 1px solid var(--border-soft);
+  }
+  .column-head .dot { width: 10px; height: 10px; border-radius: 50%; flex-shrink: 0; }
+  .column[data-side="sheng"] .dot { background: var(--gold); }
+  .column[data-side="bushi"] .dot { background: var(--slate); }
+  .column-head h2 { margin: 0; font-size: 1.25rem; color: var(--text-hi); letter-spacing: .03em; }
+  .column-count { margin-left: auto; font-size: .78rem; color: var(--text-muted); font-variant-numeric: tabular-nums; }
+
+  .notes { display: flex; flex-direction: column; gap: 10px; margin-bottom: 16px; }
+  .note {
+    position: relative; background: var(--bg-elevated); border: 1px solid var(--border-soft);
+    border-left: 3px solid var(--gold); border-radius: 10px; padding: 11px 30px 12px 14px;
+    font-size: .92rem; color: var(--text-body); word-break: break-word;
+  }
+  .column[data-side="bushi"] .note { border-left-color: var(--slate); }
+  .note .author { display: block; margin-top: 6px; font-size: .76rem; color: var(--text-muted); }
+  .note .del {
+    position: absolute; top: 8px; right: 8px; width: 20px; height: 20px; border: none;
+    background: transparent; color: var(--text-muted); cursor: pointer; font-size: 1rem;
+    line-height: 1; opacity: 0; border-radius: 4px;
+  }
+  .note:hover .del, .note .del:focus-visible { opacity: 1; }
+  .note .del:hover { color: var(--danger); background: var(--border-soft); }
+  .empty-hint { color: var(--text-muted); font-style: italic; font-size: .88rem; margin-bottom: 16px; }
+
+  .ghost-btn {
+    display: inline-flex; align-items: center; gap: 4px; background: none; border: none;
+    padding: 2px 0; color: var(--gold); font-size: .9rem; cursor: pointer; font-family: inherit;
+    margin-top: auto;
+  }
+  .ghost-btn:hover { color: var(--gold-strong); }
+  .ghost-btn:focus-visible, .note .del:focus-visible, .note-form button:focus-visible,
+  .note-form textarea:focus-visible, .note-form input:focus-visible {
+    outline: 2px solid var(--gold); outline-offset: 2px;
+  }
+
+  .note-form { margin-top: 10px; display: flex; flex-direction: column; gap: 8px; }
+  .note-form textarea, .note-form input[type="text"], .note-form input[type="password"] {
+    width: 100%; background: var(--bg); border: 1px solid var(--border); border-radius: 8px;
+    color: var(--text-hi); font-family: inherit; font-size: .88rem; padding: 8px 10px;
+  }
+  .note-form textarea { min-height: 56px; resize: vertical; }
+  .note-form .author-field { font-size: .8rem; }
+  .note-form .row { display: flex; gap: 8px; justify-content: flex-end; align-items: center; }
+  .note-form button {
+    font-family: inherit; font-size: .82rem; padding: 6px 14px; border-radius: 999px;
+    cursor: pointer; border: 1px solid var(--border); background: none; color: var(--text-muted);
+  }
+  .note-form button.primary { background: var(--gold); border-color: var(--gold); color: var(--bg); font-weight: 700; }
+  .note-form button.primary:hover { background: var(--gold-strong); }
+  .note-form button:not(.primary):hover { color: var(--text-hi); }
+
+  .care-note {
+    margin-top: 40px; background: var(--bg-card); border: 1px solid var(--border-soft); border-radius: 16px;
+    padding: 20px 24px; font-size: .86rem; color: var(--text-muted); text-align: center;
+  }
+  .care-note b { color: var(--gold); }
+  .sign-off { text-align: center; margin-top: 34px; color: var(--text-hi); font-family: "Noto Serif TC", serif; font-size: 1.05rem; }
+  .sign-off span { display: block; color: var(--text-muted); font-size: .9rem; margin-top: 6px; }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .column, .note { transition: box-shadow .2s ease, transform .2s ease; }
+  }
+</style>
+</head>
+<body>
+
+<div class="wrap">
+  <header class="hero">
+    <div class="eyebrow">生 與 不 生 的 大 哉 問</div>
+    <h1>這裡，是大家一起寫的筆記</h1>
+    <p class="lede">沒有標準答案，只有妳／你此刻的答案。</p>
+    <p class="lede">留下一句話，也是留給下一個猶豫的人。可以署名，也可以只是路過。</p>
+    <div class="whisper-count">🕯️ 目前已經有 <b id="whisperCount">…</b> 句悄悄話留在這裡</div>
+  </header>
+
+  <div id="statusBanner" class="status-banner"></div>
+  <div id="adminBar" class="admin-bar"></div>
+
+  <main id="board" class="columns"></main>
+
+  <div class="care-note">
+    如果寫著寫著，想起了一些還沒說出口的重量——那很正常。<br>
+    需要有人說說話時：<b>1925</b> 安心專線（依舊愛我）、<b>0800-870-870</b> 孕產婦關懷專線（抱緊您），都在。
+  </div>
+
+  <div class="sign-off">
+    謝謝妳／你，願意誠實地寫下來。
+    <span>我們，下次見。🌙</span>
+  </div>
+</div>
+
+<script>
+(function () {
+  "use strict";
+
+  // ⚠️ 把下面這行換成你自己部署出來的 Apps Script 網頁應用程式網址（.../exec 結尾）
+  var CONFIG = {
+    APPS_SCRIPT_URL: "https://script.google.com/macros/s/AKfycbw6EkPsja2aDW4C96qCtI34XslIJf38_u4VCriCFnDsGv4uwKIz6RC6NXrerAg48OP7/exec"
+  };
+
+  var POLL_INTERVAL_MS = 20000;
+
+  var sides = [
+    { key: "sheng", label: "生育" },
+    { key: "bushi", label: "我不要生育" }
+  ];
+
+  var state = { messages: [] };
+  var adminPassword = null; // 只存在記憶體裡，重新整理頁面就會登出
+  var openForms = 0;
+
+  function setStatus(msg, isError) {
+    var el = document.getElementById("statusBanner");
+    el.textContent = msg || "";
+    el.className = "status-banner" + (isError ? " error" : "");
+  }
+
+  function apiGet() {
+    return fetch(CONFIG.APPS_SCRIPT_URL, { method: "GET" }).then(function (r) { return r.json(); });
+  }
+
+  function apiPost(payload) {
+    return fetch(CONFIG.APPS_SCRIPT_URL, {
+      method: "POST",
+      headers: { "Content-Type": "text/plain;charset=utf-8" },
+      body: JSON.stringify(payload)
+    }).then(function (r) { return r.json(); });
+  }
+
+  function loadData(silent) {
+    if (!CONFIG.APPS_SCRIPT_URL || CONFIG.APPS_SCRIPT_URL.indexOf("PASTE_YOUR") === 0) {
+      setStatus("⚠️ 還沒接上資料庫：請先部署 Apps Script，並把網址填進 index.html 的 CONFIG.APPS_SCRIPT_URL。", true);
+      return Promise.resolve();
+    }
+    if (!silent) setStatus("載入中…");
+    return apiGet().then(function (res) {
+      if (!res || !res.success) throw new Error((res && res.error) || "讀取失敗");
+      state.messages = res.messages || [];
+      setStatus("");
+      if (openForms === 0) render();
+    }).catch(function (err) {
+      setStatus("⚠️ 讀取留言失敗：" + err.message + "（請確認 Apps Script 網址是否正確、且已部署為「所有人可存取」）", true);
+    });
+  }
+
+  function messagesFor(sideKey) {
+    return state.messages.filter(function (m) { return m.side === sideKey; });
+  }
+
+  function renderAdminBar() {
+    var bar = document.getElementById("adminBar");
+    bar.className = "admin-bar" + (adminPassword ? " on" : "");
+    if (adminPassword) {
+      bar.innerHTML = '<span class="pill">🔑 管理者模式已開啟</span> <button id="logoutBtn">登出</button>';
+      document.getElementById("logoutBtn").addEventListener("click", function () {
+        adminPassword = null;
+        renderAdminBar();
+        render();
+      });
+    } else {
+      bar.innerHTML = '<button id="loginBtn">🔑 管理者登入</button>';
+      document.getElementById("loginBtn").addEventListener("click", function () {
+        if (bar.querySelector(".note-form")) return;
+        var form = buildForm({
+          placeholder: "輸入管理密碼",
+          password: true,
+          onSubmit: function (pwd, done) {
+            apiPost({ action: "adminAuth", password: pwd }).then(function (res) {
+              if (res && res.success) {
+                adminPassword = pwd;
+                renderAdminBar();
+                render();
+              } else {
+                alert("密碼錯誤");
+                done();
+              }
+            }).catch(function () { alert("連線失敗，稍後再試"); done(); });
+          }
+        });
+        bar.appendChild(form);
+        form.querySelector("input,textarea").focus();
+      });
+    }
+  }
+
+  function render() {
+    var board = document.getElementById("board");
+    board.innerHTML = "";
+
+    sides.forEach(function (side) {
+      var col = document.createElement("section");
+      col.className = "column";
+      col.setAttribute("data-side", side.key);
+
+      var msgs = messagesFor(side.key);
+
+      var head = document.createElement("div");
+      head.className = "column-head";
+      head.innerHTML = '<span class="dot"></span><h2>' + side.label + "</h2>" +
+        '<span class="column-count">' + msgs.length + " 則</span>";
+      col.appendChild(head);
+
+      if (msgs.length) {
+        var notesWrap = document.createElement("div");
+        notesWrap.className = "notes";
+        msgs.forEach(function (msg) {
+          var note = document.createElement("div");
+          note.className = "note";
+          var span = document.createElement("span");
+          span.textContent = msg.body;
+          note.appendChild(span);
+          var author = document.createElement("span");
+          author.className = "author";
+          author.textContent = "— " + (msg.author ? msg.author : "匿名");
+          note.appendChild(author);
+          if (adminPassword) {
+            var del = document.createElement("button");
+            del.className = "del";
+            del.setAttribute("aria-label", "刪除這句話");
+            del.textContent = "×";
+            del.addEventListener("click", function () {
+              if (!confirm("確定要刪除這則留言？")) return;
+              apiPost({ action: "adminDeleteMessage", id: msg.id, password: adminPassword }).then(function (res) {
+                if (res && res.success) { loadData(true); }
+                else { alert((res && res.error) || "刪除失敗"); }
+              }).catch(function () { alert("連線失敗，稍後再試"); });
+            });
+            note.appendChild(del);
+          }
+          notesWrap.appendChild(note);
+        });
+        col.appendChild(notesWrap);
+      } else {
+        var hint = document.createElement("p");
+        hint.className = "empty-hint";
+        hint.textContent = "還沒有人留言，當第一個也可以。";
+        col.appendChild(hint);
+      }
+
+      var addBtn = document.createElement("button");
+      addBtn.className = "ghost-btn";
+      addBtn.textContent = "＋ 我想新增答案";
+      addBtn.addEventListener("click", function () {
+        if (col.querySelector(".note-form")) return;
+        var form = buildForm({
+          placeholder: "寫下妳／你的想法……",
+          withAuthor: true,
+          onSubmit: function (text, done, author) {
+            apiPost({ action: "addMessage", side: side.key, body: text, author: author }).then(function (res) {
+              if (res && res.success) {
+                state.messages.push(res.message);
+                render();
+              } else {
+                alert((res && res.error) || "送出失敗");
+                done();
+              }
+            }).catch(function () { alert("連線失敗，稍後再試"); done(); });
+          }
+        });
+        col.appendChild(form);
+        form.querySelector("textarea").focus();
+      });
+      col.appendChild(addBtn);
+
+      board.appendChild(col);
+    });
+
+    document.getElementById("whisperCount").textContent = state.messages.length;
+  }
+
+  function buildForm(opts) {
+    openForms++;
+    var form = document.createElement("div");
+    form.className = "note-form";
+
+    var input;
+    if (opts.password) {
+      input = document.createElement("input");
+      input.type = "password";
+    } else {
+      input = document.createElement("textarea");
+    }
+    input.placeholder = opts.placeholder || "";
+    form.appendChild(input);
+
+    var authorInput = null;
+    if (opts.withAuthor) {
+      authorInput = document.createElement("input");
+      authorInput.type = "text";
+      authorInput.className = "author-field";
+      authorInput.placeholder = "你的名字（留白＝匿名）";
+      form.appendChild(authorInput);
+    }
+
+    var row = document.createElement("div");
+    row.className = "row";
+    var cancel = document.createElement("button");
+    cancel.textContent = "取消";
+    cancel.addEventListener("click", teardown);
+    var submit = document.createElement("button");
+    submit.className = "primary";
+    submit.textContent = "送出";
+    submit.addEventListener("click", function () {
+      var v = input.value.trim();
+      if (!v) return;
+      submit.disabled = true;
+      submit.textContent = "送出中…";
+      var done = function () { submit.disabled = false; submit.textContent = "送出"; };
+      if (opts.withAuthor) {
+        opts.onSubmit(v, done, authorInput.value.trim());
+      } else {
+        opts.onSubmit(v, done);
+      }
+    });
+    row.appendChild(cancel);
+    row.appendChild(submit);
+    form.appendChild(row);
+
+    function teardown() {
+      openForms = Math.max(0, openForms - 1);
+      form.remove();
+    }
+
+    return form;
+  }
+
+  renderAdminBar();
+  loadData();
+  setInterval(function () { loadData(true); }, POLL_INTERVAL_MS);
+})();
+</script>
+</body>
+</html>
