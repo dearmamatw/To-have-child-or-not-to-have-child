@@ -165,6 +165,12 @@
   .care-note b { color: var(--gold); }
   .sign-off { text-align: center; margin-top: 34px; color: var(--text-hi); font-family: "Noto Serif TC", serif; font-size: 1.05rem; }
   .sign-off span { display: block; color: var(--text-muted); font-size: .9rem; margin-top: 6px; }
+  .sign-off .fb-link {
+    display: block; margin-top: 18px; font-family: "PingFang TC", "Microsoft JhengHei", sans-serif;
+    font-size: .86rem;
+  }
+  .sign-off .fb-link a { color: var(--gold); text-decoration: none; border-bottom: 1px solid transparent; }
+  .sign-off .fb-link a:hover, .sign-off .fb-link a:focus-visible { border-bottom-color: var(--gold); }
 
   .admin-bar {
     display: flex; flex-direction: column; align-items: center; gap: 10px;
@@ -206,6 +212,7 @@
   <div class="sign-off">
     謝謝妳／你，願意誠實地寫下來。
     <span>我們，下次見。🌙</span>
+    <span class="fb-link">📎 <a href="https://www.facebook.com/dearmama.tw" target="_blank" rel="noopener">想聽更多，來粉專找我們聊聊，追蹤《媽媽，妳睡了嗎？》粉絲專頁</a></span>
   </div>
 
   <div id="adminBar" class="admin-bar"></div>
